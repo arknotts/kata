@@ -2,4 +2,26 @@
     ViewBag.Title = "Checkout";
 }
 
+<script src="~/App/checkout.js"></script>
+
 <h1>Checkout</h1>
+
+<div ng-controller="CheckoutController">
+    <div class="row">
+        <div class="col-lg-8">
+            <h2>Stock</h2>
+            <div class="well clearfix" ng-repeat="item in itemsInStock">
+                {{item.Code}} <span class="text-muted">{{item.Price | currency}}</span>
+
+                <span class="label label-default" ng-if="item.DealQuantity != null"> <!-- only show deal if there is one -->
+                    {{item.DealQuantity}} for {{item.DealPrice | currency}}
+                </span>
+
+                <button class="btn btn-default pull-right" ng-click="scan(item)">SCAN</button>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h2>Order</h2>
+        </div>
+    </div>
+</div>
