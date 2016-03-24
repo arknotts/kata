@@ -22,6 +22,12 @@
         </div>
         <div class="col-lg-4">
             <h2>Order</h2>
+            <div ng-repeat="scannedItem in itemsScanned">
+                {{scannedItem.item.Code}} <span class="text-muted">x {{scannedItem.quantity}}</span>
+            </div>
+            <h3>Total</h3>
+            <hr />
+            <h4>TODO</h4>
         </div>
     </div>
 </div>
