@@ -6,6 +6,7 @@
 
 <h1>Checkout</h1>
 
+<!-- Set controller on this div so it's only scoped to this section -->
 <div ng-controller="CheckoutController">
     <div class="row">
         <div class="col-lg-8">
@@ -15,6 +16,8 @@
                     <div><strong>{{item.Code}}</strong></div>
                     <div style="white-space: nowrap">
                         {{item.Price | currency}}
+
+                        <!-- Show deal label if the item has a deal -->
                         <span class="label label-default" ng-if="item.DealQuantity != null">
                             <!-- only show deal if there is one -->
                             {{item.DealQuantity}} for {{item.DealPrice | currency}}
@@ -28,12 +31,16 @@
         <div class="col-lg-4">
             <h2>Order</h2>
             <div class="well">
+                <!-- Show warning when order is empty -->
                 <div ng-if="itemsScanned.length == 0">
                     <div class="alert alert-warning">No items scanned!</div>
                 </div>
+
+                <!-- Repeat and render all order items -->
                 <div ng-repeat="orderItem in itemsScanned">
                     {{orderItem.item.Code}} <span class="text-muted">x {{orderItem.quantity}}</span>
                     <div class="pull-right">
+                        <!-- Show discount label if it was discounted -->
                         <span class="label label-success" ng-if="orderItem.discountApplied">discount</span>
                         <span>{{orderItem.totalPrice | currency}}</span>
                     </div>
