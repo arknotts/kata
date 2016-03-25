@@ -33,5 +33,42 @@ namespace Kata.Controllers
         {
             return items;
         }
+
+        /// <summary>
+        /// Calculates the total price of an item at a given quantity.
+        /// </summary>
+        /// <param name="code">Code of the item.</param>
+        /// <param name="quantity">Quantity of the item.</param>
+        /// <returns></returns>
+        public ItemPriceResult GetTotalItemPrice(string code, int quantity)
+        {
+            ItemPriceResult itemPriceResult = new ItemPriceResult();
+
+            //Find the item that matches the passed code
+            Item item = items.FirstOrDefault(i => i.Code == code);
+
+            if(item != null)
+            {
+                if(quantity >= item.DealQuantity  //make sure it has met the minimum quantity
+                    && item.DealPrice.HasValue) //and that it actually has a deal
+                {
+                    //calculate price based on number of "groups" at the deal price plus the remainder at regular price
+                    decimal totalDealPrice = (quantity / item.DealQuantity.Value) * item.DealPrice.Value;
+                    decimal remainderPrice = (quantity % item.DealQuantity.Value) * item.Price;
+                    itemPriceResult.TotalPrice = totalDealPrice + remainderPrice;
+
+                    itemPriceResult.DiscountApplied = true;
+                }
+                else
+                {
+                    //calculate it simply off of regular price
+                    itemPriceResult.TotalPrice = quantity * item.Price;
+                }
+
+                return itemPriceResult;
+            }
+
+            return null;
+        }
     }
 }

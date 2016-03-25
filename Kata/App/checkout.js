@@ -17,23 +17,40 @@ kataApp.controller('CheckoutController', ['$scope', '$http', function ($scope, $
     //callback function to scan an item
     $scope.scan = function (scannedItem)
     {
+        var thisOrderItem;
+
         //will be set to true if this item has already been scanned
         var existingItemFound = false;
-        angular.forEach($scope.itemsScanned, function (orderItem) {
+        angular.forEach($scope.itemsScanned, function (orderItem)
+        {
             if (orderItem.item.Code == scannedItem.Code) //scanned item matches this item in the order
             {
-                orderItem.quantity++; //increment the quanity
+                thisOrderItem = orderItem;
+                thisOrderItem.quantity++; //increment the quanity
                 existingItemFound = true; //set to true so we know a match was found
             }
         });
 
         if (!existingItemFound)
         {
-            //push a new item on the array
-            $scope.itemsScanned.push({
+            //create a new order item
+            thisOrderItem = {
                 item: scannedItem,
                 quantity: 1
-            });
+            };
+
+            //push a new item on the array
+            $scope.itemsScanned.push(thisOrderItem);
         }
+
+        //make API call to calculate price
+        $http.get('/api/items/totalitemprice?code=' + scannedItem.Code + '&quantity=' + thisOrderItem.quantity).then(function (result)
+        {
+            var data = result.data;
+
+            //store data in the scope object
+            thisOrderItem.totalPrice = data.TotalPrice;
+            thisOrderItem.discountApplied = data.DiscountApplied;
+        });
     };
 }]);

@@ -22,8 +22,12 @@
         </div>
         <div class="col-lg-4">
             <h2>Order</h2>
-            <div ng-repeat="scannedItem in itemsScanned">
-                {{scannedItem.item.Code}} <span class="text-muted">x {{scannedItem.quantity}}</span>
+            <div ng-repeat="orderItem in itemsScanned">
+                {{orderItem.item.Code}} <span class="text-muted">x {{orderItem.quantity}}</span>
+                <div class="pull-right">
+                    <span class="label label-success" ng-if="orderItem.discountApplied">discount</span>
+                    <span>{{orderItem.totalPrice | currency}}</span>
+                </div>
             </div>
             <h3>Total</h3>
             <hr />
