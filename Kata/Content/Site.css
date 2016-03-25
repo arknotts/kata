@@ -8,3 +8,11 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.item-info {
+    white-space: nowrap;
+}
+
+.item-info .label {
+    margin-left: 10px;
+}

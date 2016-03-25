@@ -10,23 +10,33 @@
     <div class="row">
         <div class="col-lg-8">
             <h2>Stock</h2>
-            <div class="well clearfix" ng-repeat="item in itemsInStock">
-                {{item.Code}} <span class="text-muted">{{item.Price | currency}}</span>
-
-                <span class="label label-default" ng-if="item.DealQuantity != null"> <!-- only show deal if there is one -->
-                    {{item.DealQuantity}} for {{item.DealPrice | currency}}
-                </span>
+            <div class="well clearfix item" ng-repeat="item in itemsInStock">
+                <div class="pull-left item-info">
+                    <div><strong>{{item.Code}}</strong></div>
+                    <div style="white-space: nowrap">
+                        {{item.Price | currency}}
+                        <span class="label label-default" ng-if="item.DealQuantity != null">
+                            <!-- only show deal if there is one -->
+                            {{item.DealQuantity}} for {{item.DealPrice | currency}}
+                        </span>
+                    </div>
+                </div>
 
                 <button class="btn btn-default pull-right" ng-click="scan(item)">SCAN</button>
             </div>
         </div>
         <div class="col-lg-4">
             <h2>Order</h2>
-            <div ng-repeat="orderItem in itemsScanned">
-                {{orderItem.item.Code}} <span class="text-muted">x {{orderItem.quantity}}</span>
-                <div class="pull-right">
-                    <span class="label label-success" ng-if="orderItem.discountApplied">discount</span>
-                    <span>{{orderItem.totalPrice | currency}}</span>
+            <div class="well">
+                <div ng-if="itemsScanned.length == 0">
+                    <div class="alert alert-warning">No items scanned!</div>
+                </div>
+                <div ng-repeat="orderItem in itemsScanned">
+                    {{orderItem.item.Code}} <span class="text-muted">x {{orderItem.quantity}}</span>
+                    <div class="pull-right">
+                        <span class="label label-success" ng-if="orderItem.discountApplied">discount</span>
+                        <span>{{orderItem.totalPrice | currency}}</span>
+                    </div>
                 </div>
             </div>
             <h3>Total</h3>
