@@ -7,6 +7,9 @@ kataApp.controller('CheckoutController', ['$scope', '$http', function ($scope, $
     //declare itemsScanned in the scope. This will hold all items that have been scanned, and the quantity
     $scope.itemsScanned = [];
 
+    //initialize totalPrice (so it displays something on the screen at least)
+    $scope.totalPrice = 0;
+
     //call API to get items in stock
     $http.get('/api/items').then(function (result) //TODO this URL could be generated dynamically (would help with future refactoring)
     {
@@ -52,5 +55,14 @@ kataApp.controller('CheckoutController', ['$scope', '$http', function ($scope, $
             thisOrderItem.totalPrice = data.TotalPrice;
             thisOrderItem.discountApplied = data.DiscountApplied;
         });
+
+        //make API call to recalculate total price of entire order
+        $http.post('/api/items/totalprice',
+                    JSON.stringify($scope.itemsScanned))
+        .then(function (result) {
+            var data = result.data;
+
+            $scope.totalPrice = data.TotalPrice;
+        })
     };
 }]);
